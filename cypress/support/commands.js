@@ -1,4 +1,4 @@
-const defaultTestUserEmail = 'testuser+admin@opencollective.com';
+import { defaultTestUserEmail } from './data';
 
 Cypress.Commands.add('login', (params = {}) => {
   const { email = defaultTestUserEmail, redirect = null } = params;
@@ -12,8 +12,8 @@ Cypress.Commands.add('login', (params = {}) => {
   });
 });
 
-Cypress.Commands.add('createCollective', ({ type = 'ORGANIZATION' }) => {
-  const user = { email: defaultTestUserEmail, newsletterOptIn: false };
+Cypress.Commands.add('createCollective', ({ type = 'ORGANIZATION', email = defaultTestUserEmail }) => {
+  const user = { email, newsletterOptIn: false };
   return signinRequest(user, null).then(response => {
     const token = getTokenFromRedirectUrl(response.body.redirect);
     return graphqlQuery(token, {
